@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,12 +17,14 @@ import java.util.List;
 
 public class FlowLayoutDialog extends AlertDialog {
     private Context context;
-    private List<Product.Classify> classifies;
+    private List<CateBean> cateBeanList;
+    private ProductAdapter productAdapter;
+    private ChooseResultListenner chooseResultListenner;
 
-    public FlowLayoutDialog(Context context, List<Product.Classify> classifies) {
+    public FlowLayoutDialog(Context context, List<CateBean> cateBeanList) {
         super(context);
         this.context = context;
-        this.classifies = classifies;
+        this.cateBeanList = cateBeanList;
     }
 
     protected FlowLayoutDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
@@ -44,7 +47,8 @@ public class FlowLayoutDialog extends AlertDialog {
         view.findViewById(R.id.ll_buttom).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+                String cateIds = productAdapter.getSelectedCateIds();
+                chooseResultListenner.onChooseResult(cateIds);
             }
         });
 
@@ -58,10 +62,20 @@ public class FlowLayoutDialog extends AlertDialog {
 
         RecyclerView productView = (RecyclerView) findViewById(R.id.product_view);
         productView.setLayoutManager(new LinearLayoutManager(context));
-        productView.setAdapter(new ProductAdapter(context, classifies));
+        productAdapter = new ProductAdapter(context, cateBeanList);
+        productView.setAdapter(productAdapter);
+
     }
 
     private int dp2px(float value) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, context.getResources().getDisplayMetrics());
+    }
+
+    public void setChooseResultListenner(ChooseResultListenner chooseResultListenner) {
+        this.chooseResultListenner = chooseResultListenner;
+    }
+
+    public interface ChooseResultListenner {
+        void onChooseResult(String cateids);
     }
 }

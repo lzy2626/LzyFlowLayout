@@ -1,13 +1,13 @@
 package com.lzy.flowlayoutdemo;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.lzy.flowlayout.CateBean;
 import com.lzy.flowlayout.FlowLayoutDialog;
-import com.lzy.flowlayout.Product;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,50 +17,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        List<Product.Classify> classifies = new ArrayList<>();
-        classifies.add(new Product.Classify("年级", Arrays.asList(
-                new Product.Classify.Des("一年级"),
-                new Product.Classify.Des("二年级"),
-                new Product.Classify.Des("三年级"),
-                new Product.Classify.Des("四年级"),
-                new Product.Classify.Des("五年级"),
-                new Product.Classify.Des("六年级"))));
-        classifies.add(new Product.Classify("科目", Arrays.asList(new Product.Classify.Des("180"),
-                new Product.Classify.Des("175"),
-                new Product.Classify.Des("170"),
-                new Product.Classify.Des("165"),
-                new Product.Classify.Des("165"),
-                new Product.Classify.Des("165"),
-                new Product.Classify.Des("165"),
-                new Product.Classify.Des("160"),
-                new Product.Classify.Des("155"),
-                new Product.Classify.Des("150"))));
-        classifies.add(new Product.Classify("科目", Arrays.asList(new Product.Classify.Des("180"),
-                new Product.Classify.Des("175"),
-                new Product.Classify.Des("170"),
-                new Product.Classify.Des("165"),
-                new Product.Classify.Des("165"),
-                new Product.Classify.Des("165"),
-                new Product.Classify.Des("165"),
-                new Product.Classify.Des("160"),
-                new Product.Classify.Des("155"),
-                new Product.Classify.Des("150"))));
-        classifies.add(new Product.Classify("科目", Arrays.asList(new Product.Classify.Des("180"),
-                new Product.Classify.Des("175"),
-                new Product.Classify.Des("170"),
-                new Product.Classify.Des("165"),
-                new Product.Classify.Des("165"),
-                new Product.Classify.Des("165"),
-                new Product.Classify.Des("165"),
-                new Product.Classify.Des("160"),
-                new Product.Classify.Des("155"),
-                new Product.Classify.Des("150"))));
-        classifies.add(new Product.Classify("款式",
-                Arrays.asList(new Product.Classify.Des("男款"), new Product.Classify.Des("语文"),
-                        new Product.Classify.Des("数学"),
-                        new Product.Classify.Des("英语"))));
+        List<CateBean> cateBeanList = new ArrayList<>();
+        CateBean cateBean = new CateBean();
+        cateBean.setCcid(1);
+        cateBean.setIdx(1);
+        cateBean.setName("年级");
 
-        FlowLayoutDialog flowLayoutDialog = new FlowLayoutDialog(this, classifies);
+        List<CateBean.ChildcatelistBean> childcatelist = new ArrayList<>();
+        CateBean.ChildcatelistBean childcatelistBean = new CateBean.ChildcatelistBean();
+        childcatelistBean.setCccid(1);
+        childcatelistBean.setIdx(1);
+        childcatelistBean.setName("一年级");
+        childcatelist.add(childcatelistBean);
+
+        cateBean.setChildcatelist(childcatelist);
+        cateBeanList.add(cateBean);
+
+
+        FlowLayoutDialog flowLayoutDialog = new FlowLayoutDialog(this, cateBeanList);
+        flowLayoutDialog.setChooseResultListenner(new FlowLayoutDialog.ChooseResultListenner() {
+            @Override
+            public void onChooseResult(String cateids) {
+                Log.e("cateids", cateids);
+            }
+        });
         flowLayoutDialog.show();
 
 
